@@ -1,7 +1,9 @@
 window.onload = windowPrepared;
 
 function windowPrepared() {
-    let canvas = document.getElementById("canvasForQuotes");
+    let canvas = document.createElement('canvas');
+    let body = document.getElementsByTagName("body")[0];
+    body.appendChild(canvas);
     let context = canvas.getContext("2d");
 
     canvas.width = 500;
