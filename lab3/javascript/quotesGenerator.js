@@ -14,24 +14,24 @@ function windowPrepared() {
     let quote = "";
     let backgroundImage1 = new Image();
 
-    backgroundImage1.src = "https://source.unsplash.com/collection/1127163/300x500";
     backgroundImage1.crossOrigin = 'anonymous';
+    backgroundImage1.src = "https://source.unsplash.com/collection/1127163/300x500";
     backgroundImage1.onload = function () {
         counter++;
         drawContent();
     };
 
     let backgroundImage2 = new Image();
-    backgroundImage2.src = "https://source.unsplash.com/collection/1127163/200x260";
     backgroundImage2.crossOrigin = 'anonymous';
+    backgroundImage2.src = "https://source.unsplash.com/collection/1127163/200x260";
     backgroundImage2.onload = function () {
         counter++;
         drawContent();
     };
 
     let backgroundImage3 = new Image();
-    backgroundImage3.src = "https://source.unsplash.com/collection/1127163/200x240";
     backgroundImage3.crossOrigin = 'anonymous';
+    backgroundImage3.src = "https://source.unsplash.com/collection/1127163/200x240";
     backgroundImage3.onload = function () {
         counter++;
         drawContent();
