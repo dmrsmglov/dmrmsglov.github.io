@@ -4,10 +4,33 @@ function contentLoaded() {
     let canvas = document.getElementById("canvasForQuotes");
     let context = canvas.getContext("2d");
 
-    context.fillStyle = "red";
-    context.fontSize = 100;
     canvas.width = 500;
     canvas.height = 500;
+
+    let counter = 0;
+
+    let quote = "";
+    let backgroundImage1 = new Image();
+
+    backgroundImage1.src = "https://source.unsplash.com/collection/1127163/300x500";
+    backgroundImage1.onload = function () {
+        counter++;
+        drawContent();
+    };
+
+    let backgroundImage2 = new Image();
+    backgroundImage2.src = "https://source.unsplash.com/collection/1127163/200x260";
+    backgroundImage2.onload = function () {
+        counter++;
+        drawContent();
+    };
+
+    let backgroundImage3 = new Image();
+    backgroundImage3.src = "https://source.unsplash.com/collection/1127163/200x240";
+    backgroundImage3.onload = function () {
+        counter++;
+        drawContent();
+    };
 
     let requestQuote = new XMLHttpRequest();
     requestQuote.open('GET', "https://thesimpsonsquoteapi.glitch.me/quotes");
@@ -15,9 +38,36 @@ function contentLoaded() {
 
     requestQuote.onload = requestQuoteLoaded;
 
+
     function requestQuoteLoaded() {
-        let responseObject = JSON.parse(this.response);
-        console.log(responseObject[0].quote);
-        context.fillText(responseObject[0].quote, 50, 250);
+        let responseObject = JSON.parse(requestQuote.response);
+        quote = responseObject[0].quote;
+        counter++;
+        drawContent();
+    }
+
+    function drawContent() {
+        if (counter === 4) {
+            context.drawImage(backgroundImage1, 0, 0);
+            context.drawImage(backgroundImage2, 300, 0);
+            context.drawImage(backgroundImage3, 300, 260);
+            context.font = "30px Comic Sans MS";
+            context.strokeStyle = "#00ffff";
+            let words = quote.split(' ');
+            let it = 0;
+            let current = "";
+            let offset = 0;
+            while (it < words.length) {
+                if ((current.length + words[it].length) * 15 > 450) {
+                    context.strokeText(current, 50, 200 + offset);
+                    offset += 30;
+                    current = words[it] + " ";
+                } else {
+                    current += words[it] + " ";
+                }
+                it++;
+            }
+            context.strokeText(current, 50, 200 + offset);
+        }
     }
 }
