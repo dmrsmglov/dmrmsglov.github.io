@@ -1,6 +1,6 @@
-window.onload = contentLoaded;
+window.onload = windowPrepared;
 
-function contentLoaded() {
+function windowPrepared() {
     let canvas = document.getElementById("canvasForQuotes");
     let context = canvas.getContext("2d");
 
@@ -13,6 +13,7 @@ function contentLoaded() {
     let backgroundImage1 = new Image();
 
     backgroundImage1.src = "https://source.unsplash.com/collection/1127163/300x500";
+    backgroundImage1.crossOrigin = 'anonymous';
     backgroundImage1.onload = function () {
         counter++;
         drawContent();
@@ -20,6 +21,7 @@ function contentLoaded() {
 
     let backgroundImage2 = new Image();
     backgroundImage2.src = "https://source.unsplash.com/collection/1127163/200x260";
+    backgroundImage2.crossOrigin = 'anonymous';
     backgroundImage2.onload = function () {
         counter++;
         drawContent();
@@ -27,6 +29,7 @@ function contentLoaded() {
 
     let backgroundImage3 = new Image();
     backgroundImage3.src = "https://source.unsplash.com/collection/1127163/200x240";
+    backgroundImage3.crossOrigin = 'anonymous';
     backgroundImage3.onload = function () {
         counter++;
         drawContent();
@@ -38,7 +41,6 @@ function contentLoaded() {
 
     requestQuote.onload = requestQuoteLoaded;
 
-
     function requestQuoteLoaded() {
         let responseObject = JSON.parse(requestQuote.response);
         quote = responseObject[0].quote;
@@ -46,28 +48,47 @@ function contentLoaded() {
         drawContent();
     }
 
+    function drawBlackout() {
+        context.fillStyle = "rgba(0, 0, 0, 0.4)";
+        context.fillRect(0, 0, 500, 500);
+    }
+
+
     function drawContent() {
         if (counter === 4) {
             context.drawImage(backgroundImage1, 0, 0);
             context.drawImage(backgroundImage2, 300, 0);
             context.drawImage(backgroundImage3, 300, 260);
             context.font = "30px Comic Sans MS";
-            context.strokeStyle = "#00ffff";
-            let words = quote.split(' ');
-            let it = 0;
-            let current = "";
-            let offset = 0;
-            while (it < words.length) {
-                if ((current.length + words[it].length) * 15 > 450) {
-                    context.strokeText(current, 50, 200 + offset);
-                    offset += 30;
-                    current = words[it] + " ";
-                } else {
-                    current += words[it] + " ";
-                }
-                it++;
-            }
-            context.strokeText(current, 50, 200 + offset);
+            context.strokeStyle = "#ffffff";
+            drawBlackout();
+            fitQuoteIntoCanvas();
+            canvas.onclick = download;
         }
+    }
+
+    function download() {
+        const fakeLink = document.createElement('a');
+        fakeLink.download = 'canvas.png';
+        fakeLink.href = canvas.toDataURL();
+        fakeLink.click();
+    }
+
+    function fitQuoteIntoCanvas() {
+        let words = quote.split(' ');
+        let it = 0;
+        let current = "";
+        let offset = 0;
+        while (it < words.length) {
+            if ((current.length + words[it].length) * 15 > 450) {
+                context.strokeText(current, 50, 200 + offset);
+                offset += 30;
+                current = words[it] + " ";
+            } else {
+                current += words[it] + " ";
+            }
+            it++;
+        }
+        context.strokeText(current, 50, 200 + offset);
     }
 }
